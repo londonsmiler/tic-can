@@ -1,4 +1,4 @@
-package com.tickle.me.insanitytracker.db;
+package com.tickle.me.insanitytracker.db.repository;
 
 public interface SavedDataRepository {
 
