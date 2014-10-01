@@ -7,7 +7,7 @@
 	<classpathentry kind="lib" path="/InsanityTracker/libs/test/hamcrest-all-1.3.jar"/>
 	<classpathentry kind="lib" path="/InsanityTracker/libs/test/robolectric-2.3-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="/InsanityTracker/libs/test/robolectric-2.3-sources.jar"/>
-	<classpathentry kind="lib" path="C:/jondev/tool/sdk/platforms/android-20/android.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/jondev/tool/sdk/platforms/android-18/android.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

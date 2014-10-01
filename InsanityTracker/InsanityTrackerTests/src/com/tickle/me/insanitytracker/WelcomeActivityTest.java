@@ -25,22 +25,13 @@ public class WelcomeActivityTest {
 	}
 
 	@Test
-	public void shouldHaveTextToMarkComplete() throws Exception {
+	public void shouldHaveButtonToOpenCalendar() throws Exception {
 
-		String s = activity.getString(R.string.done);
-
-		assertThat(s, CoreMatchers.equalTo("Done!"));
-
-	}
-
-	@Test
-	public void shouldHaveButtonToMarkComplete() throws Exception {
-
-		View button = activity.findViewById(R.id.imageView1);
+		View button = activity.findViewById(R.id.calender_button);
 
 		button.performClick();
 
-		Intent expectedIntent = new Intent(activity, WelcomeActivity.class);
+		Intent expectedIntent = new Intent(activity, CalendarActivity.class);
 		assertThat(Robolectric.shadowOf(activity).getNextStartedActivity(),
 				CoreMatchers.equalTo(expectedIntent));
 
