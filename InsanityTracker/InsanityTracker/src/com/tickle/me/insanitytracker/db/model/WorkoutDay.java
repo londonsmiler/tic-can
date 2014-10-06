@@ -40,4 +40,8 @@ public class WorkoutDay {
 		public static final String COLUMN_NAME_COMPLETED = "complete";
 
 	}
+
+	public int getDay() {
+		return day;
+	}
 }

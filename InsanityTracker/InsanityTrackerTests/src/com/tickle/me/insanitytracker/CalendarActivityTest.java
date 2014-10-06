@@ -11,7 +11,7 @@ import org.robolectric.RobolectricTestRunner;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
-import com.tickle.me.insanitytracker.calendar.WorkoutAdapter;
+import com.tickle.me.insanitytracker.calendar.WorkoutDayAdapter;
 
 @RunWith(RobolectricTestRunner.class)
 public class CalendarActivityTest {
@@ -32,7 +32,7 @@ public class CalendarActivityTest {
 
 		ListAdapter adapter = calendarGridView.getAdapter();
 
-		assertTrue(adapter instanceof WorkoutAdapter);
+		assertTrue(adapter instanceof WorkoutDayAdapter);
 
 	}
 }

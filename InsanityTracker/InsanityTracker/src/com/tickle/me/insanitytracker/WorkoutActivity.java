@@ -1,47 +1,38 @@
 package com.tickle.me.insanitytracker;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.tickle.me.insanitytracker.calendar.WorkoutAdapter;
 import com.tickle.me.insanitytracker.calendar.WorkoutAdapterFactory;
 
-public class CalendarActivity extends Activity {
+public class WorkoutActivity extends Activity {
+
+	protected static final String DAY_PARAMETER = "day to display";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_calendar);
+		setContentView(R.layout.activity_workout);
 
-		GridView gridView = (GridView) findViewById(R.id.calendar_grid_view);
+		ListView listView = (ListView) findViewById(R.id.dailyWorkoutList);
 
-		gridView.setAdapter(WorkoutAdapterFactory.getDBWorkoutAdapter(this));
+		int day = 1;
+		listView.setAdapter(new WorkoutAdapter(WorkoutAdapterFactory
+				.getDBRepository(this), this, day));
 
-		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int position, long id) {
-				Intent intent = new Intent(getApplicationContext(),
-						WorkoutActivity.class);
-				intent.putExtra(WorkoutActivity.DAY_PARAMETER, position);
-
-				startActivity(intent);
-
-			}
-		});
+		Toast.makeText(this, "got day " + day, Toast.LENGTH_LONG).show();
 
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.calendar, menu);
+		getMenuInflater().inflate(R.menu.workout, menu);
 		return true;
 	}
 

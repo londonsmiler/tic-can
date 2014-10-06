@@ -8,14 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tickle.me.insanitytracker.WelcomeActivity$PlaceholderFragment" >
 
-    <ImageView
-        android:id="@+id/imageView1"
+    <ImageButton
+        android:id="@+id/calender_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="58dp"
-        android:layout_marginTop="38dp"
-        android:src="@android:drawable/ic_menu_today" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:onClick="openCalendar"
+        android:src="@android:drawable/ic_menu_agenda" android:contentDescription=""/>
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -15,9 +16,13 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.SpannedString;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tickle.me.insanitytracker.CalendarActivity;
@@ -27,7 +32,7 @@ import com.tickle.me.insanitytracker.db.model.WorkoutDayBuilder;
 import com.tickle.me.insanitytracker.db.repository.SavedDataRepository;
 
 @RunWith(RobolectricTestRunner.class)
-public class WorkoutAdapterTest {
+public class WorkoutDayAdapterTest {
 
 	Context context;
 
@@ -47,9 +52,9 @@ public class WorkoutAdapterTest {
 		days.add(day1);
 		days.add(day2);
 
-		SavedDataRepository repository = new TestRepository(days);
+		SavedDataRepository repository = new TestWorkoutDayRepository(days);
 
-		WorkoutAdapter adapter = new WorkoutAdapter(repository, context);
+		WorkoutDayAdapter adapter = new WorkoutDayAdapter(repository, context);
 
 		assertThat(adapter.getCount(), CoreMatchers.equalTo(days.size()));
 
@@ -66,17 +71,22 @@ public class WorkoutAdapterTest {
 		days.add(day1);
 		days.add(day2);
 
-		SavedDataRepository repository = new TestRepository(days);
+		SavedDataRepository repository = new TestWorkoutDayRepository(days);
 
-		WorkoutAdapter adapter = new WorkoutAdapter(repository, context);
+		WorkoutDayAdapter adapter = new WorkoutDayAdapter(repository, context);
 
 		ViewGroup viewGroup = new GridLayout(context);
 		View view = adapter.getView(0, null, viewGroup);
 
-		TextView textView = (TextView) view;
+		LinearLayout day = (LinearLayout) view;
 
-		CharSequence day0Text = "day 1\n\na title";
-		assertThat(textView.getText(), CoreMatchers.equalTo(day0Text));
+		TextView textView = (TextView) day
+				.findViewWithTag(WorkoutDayAdapter.TEXT_VIEW_TAG);
+
+		CharSequence day0Text = new SpannedString(
+				Html.fromHtml("<H2>Day 1</H2><P>a title"));
+		assertThat(textView.getText().toString(),
+				CoreMatchers.equalTo(day0Text.toString()));
 
 	}
 
@@ -90,21 +100,34 @@ public class WorkoutAdapterTest {
 		days.add(day1);
 		days.add(day2);
 
-		SavedDataRepository repository = new TestRepository(days);
+		SavedDataRepository repository = new TestWorkoutDayRepository(days);
 
-		WorkoutAdapter adapter = new WorkoutAdapter(repository, context);
+		WorkoutDayAdapter adapter = new WorkoutDayAdapter(repository, context);
 
-		TextView oldView = new TextView(context);
-		oldView.setText("old text");
+		TextView oldTextView = new TextView(context);
+		oldTextView.setTag(WorkoutDayAdapter.TEXT_VIEW_TAG);
+
+		CheckBox oldCheckBox = new CheckBox(context);
+		oldCheckBox.setTag(WorkoutDayAdapter.CHECKBOX_TAG);
+
+		LinearLayout oldLayout = new LinearLayout(context);
+		oldLayout.addView(oldTextView);
+		oldLayout.addView(oldCheckBox);
 
 		ViewGroup viewGroup = new GridLayout(context);
-		View view = adapter.getView(0, oldView, viewGroup);
+		View view = adapter.getView(0, oldLayout, viewGroup);
 
-		TextView textView = (TextView) view;
+		LinearLayout layout = (LinearLayout) view;
 
-		CharSequence day0Text = "day 1\n\na title";
-		assertThat(textView.getText(), CoreMatchers.equalTo(day0Text));
-		assertTrue(textView == oldView);
+		TextView textView = (TextView) layout
+				.findViewWithTag(WorkoutDayAdapter.TEXT_VIEW_TAG);
+
+		CheckBox checkBox = (CheckBox) layout
+				.findViewWithTag(WorkoutDayAdapter.CHECKBOX_TAG);
+
+		assertTrue(layout == oldLayout);
+		assertTrue(textView == oldTextView);
+		assertTrue(checkBox == oldCheckBox);
 
 	}
 
@@ -117,9 +140,9 @@ public class WorkoutAdapterTest {
 		days.add(day1);
 		days.add(day2);
 
-		SavedDataRepository repository = new TestRepository(days);
+		SavedDataRepository repository = new TestWorkoutDayRepository(days);
 
-		WorkoutAdapter adapter = new WorkoutAdapter(repository, context);
+		WorkoutDayAdapter adapter = new WorkoutDayAdapter(repository, context);
 
 		Object item = adapter.getItem(1);
 
@@ -127,11 +150,42 @@ public class WorkoutAdapterTest {
 
 	}
 
-	class TestRepository implements SavedDataRepository {
+	@Test
+	public void shouldSetCheckBoxAndNotBeModifiable() throws Exception {
+		WorkoutDay completedDay = new WorkoutDayBuilder().complete(true)
+				.build();
+		WorkoutDay uncompltedDay = new WorkoutDayBuilder().complete(false)
+				.dayAndId(3).build();
+
+		List<WorkoutDay> days = Arrays.asList(completedDay, uncompltedDay);
+
+		WorkoutDayAdapter adapter = new WorkoutDayAdapter(new TestWorkoutDayRepository(days),
+				context);
+
+		CheckBox c0 = getCheckBoxForIndex(adapter, 0);
+		assertThat(c0.isChecked(), CoreMatchers.equalTo(true));
+		assertThat(c0.isClickable(), CoreMatchers.equalTo(false));
+
+		CheckBox c1 = getCheckBoxForIndex(adapter, 1);
+		assertThat(c1.isChecked(), CoreMatchers.equalTo(false));
+
+	}
+
+	private CheckBox getCheckBoxForIndex(WorkoutDayAdapter adapter, int index) {
+		ViewGroup viewGroup = new GridLayout(context);
+
+		View view = adapter.getView(index, null, viewGroup);
+
+		CheckBox c = (CheckBox) view
+				.findViewWithTag(WorkoutDayAdapter.CHECKBOX_TAG);
+		return c;
+	}
+
+	class TestWorkoutDayRepository implements SavedDataRepository {
 
 		private final List<WorkoutDay> days;
 
-		public TestRepository(List<WorkoutDay> days) {
+		public TestWorkoutDayRepository(List<WorkoutDay> days) {
 			this.days = days;
 
 		}

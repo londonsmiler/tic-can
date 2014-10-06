@@ -2,6 +2,7 @@ package com.tickle.me.insanitytracker;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +39,13 @@ public class WelcomeActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void openCalendar(View view) {
+		Intent intent = new Intent(this, CalendarActivity.class);
+
+		startActivity(intent);
+
 	}
 
 	/**

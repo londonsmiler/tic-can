@@ -13,17 +13,44 @@ import com.tickle.me.insanitytracker.db.repository.SavedDataRepository;
 
 public class WorkoutAdapterFactory {
 
-	public WorkoutAdapter getDBWorkoutAdapter(Context context) {
+	private static volatile WorkoutDayAdapter INSTANCE;
+	private static SavedDataRepository REPOSITORY_INSTANCE;
 
-		InputStream inputStream = createInputStreamToReadFile(context);
-		DBLoader loader = new FileDBLoader(inputStream);
-		SavedDataRepository repository = new DBSavedDataRepository(context,
-				loader);
-		return new WorkoutAdapter(repository, context);
+	private WorkoutAdapterFactory() {
 
 	}
 
-	private InputStream createInputStreamToReadFile(Context context) {
+	public static SavedDataRepository getDBRepository(Context context) {
+		createInstancesIfRequired(context);
+
+		return REPOSITORY_INSTANCE;
+	}
+
+	public static WorkoutDayAdapter getDBWorkoutAdapter(Context context) {
+
+		createInstancesIfRequired(context);
+
+		return INSTANCE;
+
+	}
+
+	private static void createInstancesIfRequired(Context context) {
+		if (INSTANCE == null) {
+			synchronized (WorkoutAdapterFactory.class) {
+				if (INSTANCE == null) {
+					InputStream inputStream = createInputStreamToReadFile(context);
+					DBLoader loader = new FileDBLoader(inputStream);
+					REPOSITORY_INSTANCE = new DBSavedDataRepository(context,
+							loader);
+					INSTANCE = new WorkoutDayAdapter(REPOSITORY_INSTANCE, context);
+
+				}
+
+			}
+		}
+	}
+
+	private static InputStream createInputStreamToReadFile(Context context) {
 
 		InputStream is = null;
 		try {

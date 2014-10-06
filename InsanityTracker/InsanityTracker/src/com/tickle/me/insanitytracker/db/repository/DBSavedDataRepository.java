@@ -46,6 +46,7 @@ public class DBSavedDataRepository extends SQLiteOpenHelper implements
 
 	}
 
+	@Override
 	public void updateDay(WorkoutDay day) {
 
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -58,6 +59,7 @@ public class DBSavedDataRepository extends SQLiteOpenHelper implements
 				+ " = ?", new String[] { day.getIdAsString() });
 	}
 
+	@Override
 	public List<WorkoutDay> loadAllDays() {
 
 		List<WorkoutDay> daysList = new ArrayList<WorkoutDay>();
@@ -84,6 +86,7 @@ public class DBSavedDataRepository extends SQLiteOpenHelper implements
 		return (int1 == 0 ? false : true);
 	}
 
+	@Override
 	public List<Workout> loadAllWorkouts(int dayToLoad) {
 		List<Workout> workoutList = new ArrayList<Workout>();
 
