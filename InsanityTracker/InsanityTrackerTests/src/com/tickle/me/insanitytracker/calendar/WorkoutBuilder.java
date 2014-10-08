@@ -4,7 +4,7 @@ import com.tickle.me.insanitytracker.db.model.Workout;
 
 public class WorkoutBuilder {
 
-	private final boolean completed = false;
+	private boolean completed = false;
 	private String title = "a workout";
 	private int id = 0;
 
@@ -19,6 +19,11 @@ public class WorkoutBuilder {
 
 	public WorkoutBuilder id(int i) {
 		this.id = i;
+		return this;
+	}
+
+	public WorkoutBuilder complete(boolean b) {
+		completed = b;
 		return this;
 	}
 

@@ -125,6 +125,12 @@ public class WorkoutAdaptorTest {
 			return null;
 		}
 
+		@Override
+		public void saveWorkout(Workout workout) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 }

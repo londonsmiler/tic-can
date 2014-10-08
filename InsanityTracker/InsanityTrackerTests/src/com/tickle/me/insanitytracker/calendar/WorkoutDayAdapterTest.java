@@ -152,15 +152,15 @@ public class WorkoutDayAdapterTest {
 
 	@Test
 	public void shouldSetCheckBoxAndNotBeModifiable() throws Exception {
-		WorkoutDay completedDay = new WorkoutDayBuilder().complete(true)
+		WorkoutDay completedDay = new WorkoutDayBuilder().withCompleteChild()
 				.build();
-		WorkoutDay uncompltedDay = new WorkoutDayBuilder().complete(false)
-				.dayAndId(3).build();
+		WorkoutDay uncompltedDay = new WorkoutDayBuilder()
+				.withIncompleteChild().dayAndId(3).build();
 
 		List<WorkoutDay> days = Arrays.asList(completedDay, uncompltedDay);
 
-		WorkoutDayAdapter adapter = new WorkoutDayAdapter(new TestWorkoutDayRepository(days),
-				context);
+		WorkoutDayAdapter adapter = new WorkoutDayAdapter(
+				new TestWorkoutDayRepository(days), context);
 
 		CheckBox c0 = getCheckBoxForIndex(adapter, 0);
 		assertThat(c0.isChecked(), CoreMatchers.equalTo(true));
@@ -208,6 +208,12 @@ public class WorkoutDayAdapterTest {
 		@Override
 		public List<WorkoutDay> loadAllDays() {
 			return days;
+		}
+
+		@Override
+		public void saveWorkout(Workout workout) {
+			// TODO Auto-generated method stub
+
 		}
 	}
 

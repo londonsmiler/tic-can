@@ -9,10 +9,12 @@ public interface SavedDataRepository {
 
 	public abstract void initialise();
 
-	void updateDay(WorkoutDay day);
-
 	List<Workout> loadAllWorkouts(int dayToLoad);
 
 	List<WorkoutDay> loadAllDays();
+
+	void updateDay(WorkoutDay day);
+
+	void saveWorkout(Workout workout);
 
 }

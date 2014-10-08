@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.tickle.me.insanitytracker.calendar.WorkoutAdapter;
 import com.tickle.me.insanitytracker.calendar.WorkoutAdapterFactory;
+import com.tickle.me.insanitytracker.db.repository.SavedDataRepository;
 
 public class WorkoutActivity extends Activity {
 
@@ -21,11 +22,20 @@ public class WorkoutActivity extends Activity {
 
 		ListView listView = (ListView) findViewById(R.id.dailyWorkoutList);
 
-		int day = 1;
-		listView.setAdapter(new WorkoutAdapter(WorkoutAdapterFactory
-				.getDBRepository(this), this, day));
+		int day = getIntent().getExtras().getInt(DAY_PARAMETER) + 1;
 
-		Toast.makeText(this, "got day " + day, Toast.LENGTH_LONG).show();
+		// listView.setAdapter(new ArrayAdapter<String>(this,
+		// android.R.layout.simple_list_item_1, android.R.id.text1,
+		// new String[] { "one", "two" }));
+
+		final SavedDataRepository dbRepository = WorkoutAdapterFactory
+				.getDBRepository(this);
+
+		Toast.makeText(this,
+				"Found workouts: " + dbRepository.loadAllWorkouts(1).size(),
+				Toast.LENGTH_LONG).show();
+
+		listView.setAdapter(new WorkoutAdapter(dbRepository, this, day));
 
 	}
 
@@ -47,4 +57,5 @@ public class WorkoutActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 }

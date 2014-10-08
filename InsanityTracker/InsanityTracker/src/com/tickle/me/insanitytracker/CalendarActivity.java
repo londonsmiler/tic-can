@@ -29,6 +29,7 @@ public class CalendarActivity extends Activity {
 					int position, long id) {
 				Intent intent = new Intent(getApplicationContext(),
 						WorkoutActivity.class);
+
 				intent.putExtra(WorkoutActivity.DAY_PARAMETER, position);
 
 				startActivity(intent);

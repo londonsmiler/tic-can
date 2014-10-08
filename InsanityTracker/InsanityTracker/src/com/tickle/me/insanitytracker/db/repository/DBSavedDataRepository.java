@@ -69,14 +69,17 @@ public class DBSavedDataRepository extends SQLiteOpenHelper implements
 
 		if (query.moveToFirst()) {
 			do {
-				WorkoutDay aDay = new WorkoutDay(query.getInt(0),
-						query.getInt(1), query.getString(2),
-						parseBoolean(query.getInt(3)));
+				int day = query.getInt(1);
+				List<Workout> children = loadAllWorkouts(day);
+				WorkoutDay aDay = new WorkoutDay(query.getInt(0), day,
+						query.getString(2), children);
 				daysList.add(aDay);
 
 			} while (query.moveToNext());
 
 		}
+
+		query.close();
 
 		return daysList;
 
@@ -103,9 +106,12 @@ public class DBSavedDataRepository extends SQLiteOpenHelper implements
 			} while (query.moveToNext());
 		}
 
+		query.close();
+
 		return workoutList;
 	}
 
+	@Override
 	public void saveWorkout(Workout workout) {
 
 		ContentValues valuesToUpdate = new ContentValues();

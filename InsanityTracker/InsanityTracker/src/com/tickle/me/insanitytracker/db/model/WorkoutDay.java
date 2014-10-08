@@ -1,5 +1,7 @@
 package com.tickle.me.insanitytracker.db.model;
 
+import java.util.List;
+
 import android.provider.BaseColumns;
 
 public class WorkoutDay {
@@ -7,13 +9,13 @@ public class WorkoutDay {
 	private final int id;
 	private final int day;
 	private final String title;
-	private boolean complete;
+	private final List<Workout> children;
 
-	public WorkoutDay(int id, int day, String title, boolean complete) {
+	public WorkoutDay(int id, int day, String title, List<Workout> children) {
 		this.id = id;
 		this.day = day;
 		this.title = title;
-		this.complete = complete;
+		this.children = children;
 
 	}
 
@@ -22,11 +24,15 @@ public class WorkoutDay {
 	}
 
 	public boolean isComplete() {
-		return complete;
-	}
 
-	public void setComplete(boolean b) {
-		complete = b;
+		for (Workout workout : children) {
+			if (!workout.isCompleted()) {
+				return false;
+			}
+		}
+
+		return true;
+
 	}
 
 	public String getIdAsString() {

@@ -88,27 +88,6 @@ public class DBSavedDataRepositoryTest {
 	}
 
 	@Test
-	public void shouldUpdateCompleteStatusInDatabase() throws Exception {
-
-		List<WorkoutDay> loadedDay = repository.loadAllDays();
-
-		WorkoutDay dayToModify = loadedDay.get(0);
-
-		assertThat(dayToModify.isComplete(), CoreMatchers.equalTo(false));
-
-		dayToModify.setComplete(true);
-
-		repository.updateDay(dayToModify);
-
-		List<WorkoutDay> reloadedDay = repository.loadAllDays();
-
-		assertThat(reloadedDay.size(), CoreMatchers.equalTo(1));
-
-		assertThat(reloadedDay.get(0).isComplete(), CoreMatchers.equalTo(true));
-
-	}
-
-	@Test
 	public void shouldLoadDaysActivitiesFromDatabase() throws Exception {
 		List<Workout> loadedWorkouts = repository.loadAllWorkouts(1);
 

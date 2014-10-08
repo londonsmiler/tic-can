@@ -3,6 +3,7 @@ package com.tickle.me.insanitytracker.calendar;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -30,6 +31,7 @@ public class WorkoutAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		return repository.loadAllWorkouts(day).size();
+
 	}
 
 	@Override
@@ -47,18 +49,31 @@ public class WorkoutAdapter extends BaseAdapter {
 	public View getView(int arg0, View arg1, ViewGroup arg2) {
 		LinearLayout layout = new LinearLayout(context);
 
-		Workout workout = repository.loadAllWorkouts(day).get(arg0);
+		final Workout workout = repository.loadAllWorkouts(day).get(arg0);
+
+		CheckBox completedCheckBox = new CheckBox(context);
+		completedCheckBox.setChecked(workout.isCompleted());
+		completedCheckBox.setTag(COMPLETED_CHECKBOX_TAG);
+		layout.addView(completedCheckBox);
+
+		completedCheckBox.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				workout.setCompleted(((CheckBox) arg0).isChecked());
+
+				// TODO: This should be an async thread
+				repository.saveWorkout(workout);
+
+			}
+		});
 
 		TextView titleTextView = new TextView(context);
 		titleTextView.setText(Html.fromHtml("<H2>" + workout.getTitle()
 				+ "</H2"));
 		titleTextView.setTag(TITLE_TEXTVIEW_TAG);
 		layout.addView(titleTextView);
-
-		CheckBox completedCheckBox = new CheckBox(context);
-		completedCheckBox.setChecked(workout.isCompleted());
-		completedCheckBox.setTag(COMPLETED_CHECKBOX_TAG);
-		layout.addView(completedCheckBox);
 
 		return layout;
 

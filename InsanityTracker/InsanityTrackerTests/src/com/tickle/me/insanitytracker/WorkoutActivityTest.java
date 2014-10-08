@@ -19,7 +19,7 @@ public class WorkoutActivityTest {
 	}
 
 	@Test
-	public void shouldDoSomething() throws Exception {
+	public void shouldUpdateDatabaseStateToCompleted() throws Exception {
 
 	}
 }
